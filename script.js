@@ -1,14 +1,17 @@
 var startTime, elapsedTime, timerInterval
 
 function startTimer() {
-    elapsedTime = 0
+  elapsedTime = 0
   startTime = Date.now() - elapsedTime
   timerInterval = setInterval(function () {
     var currentTime = Date.now()
     elapsedTime = currentTime - startTime
     updateDisplay(elapsedTime)
-}, 10)
-function setLap() {
+  }, 10)
+  let div = document.createElement('div')
+  div.setAttribute('id', 'lap')
+  document.querySelector('.laptime').appendChild(div)
+  function setLap() {
     var milliseconds = Math.floor((elapsedTime % 1000) / 10)
     var seconds = Math.floor((elapsedTime / 1000) % 60)
     var minutes = Math.floor((elapsedTime / 1000 / 60) % 60)
@@ -24,21 +27,17 @@ function setLap() {
       milliseconds.toString().padStart(2, '0')
     let p = document.createElement('p')
     p.textContent = displayTime
-    document.querySelector('.laptime').appendChild(p)
+    document.getElementById('lap').appendChild(p)
+  }
+  document.querySelector('.lap').addEventListener('click', setLap)
 }
-document.querySelector('.lap').addEventListener('click', setLap)
-}
-
 
 function stopTimer() {
   clearInterval(timerInterval)
 }
 
 function resetTimer() {
-    var laptime = document.querySelector('.laptime')
-    for(let i=0;i<=laptime.children.length;i++){
-        laptime.children[i].remove();
-    }
+  document.getElementById('lap').remove()
   clearInterval(timerInterval)
   elapsedTime = 0
   updateDisplay(elapsedTime)
@@ -58,11 +57,10 @@ function updateDisplay(time) {
     seconds.toString().padStart(2, '0') +
     '.' +
     milliseconds.toString().padStart(2, '0')
-    
-    document.querySelector('.display').textContent = displayTime
+
+  document.querySelector('.display').textContent = displayTime
 }
 
 document.querySelector('.start').addEventListener('click', startTimer)
 document.querySelector('.stop').addEventListener('click', stopTimer)
 document.querySelector('.reset').addEventListener('click', resetTimer)
-
